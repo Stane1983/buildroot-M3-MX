@@ -39,12 +39,13 @@ ifeq ($(BR2_XBMC_REBOOT),y)
 XBMC_CONF_OPT += --enable-reboot
 endif
 
-ifeq ($(BR2_PACKAGE_OPENGL_API20),y)
-XBMC_CONF_OPT += --enable-mali20
-endif
-
 ifneq ($(BR2_CCACHE),y)
 XBMC_CONF_OPT += --disable-ccache
+endif
+
+ifeq ($(BR2_PACKAGE_OPENGL_API20),y)
+# Reference for apiv20... TODO:Test Compile
+# XBMC_EXTRA_LDFLAGS += --extra-ldflags="$LIBS -lUMP -lEGL -lGLESv2"
 endif
 
 XBMC_DEPENDENCIES += flac libmad libmpeg2 libogg \
