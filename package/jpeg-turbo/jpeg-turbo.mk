@@ -9,7 +9,6 @@ JPEG_TURBO_SOURCE = libjpeg-turbo-$(JPEG_TURBO_VERSION).tar.gz
 JPEG_TURBO_SITE = http://downloads.sourceforge.net/project/libjpeg-turbo/$(JPEG_TURBO_VERSION)
 JPEG_TURBO_INSTALL_STAGING = YES
 JPEG_TURBO_CONF_OPT = --with-jpeg8
-JPEG_TURBO_CFLAGS += -O3
 
 ifeq ($(BR2_X86_CPU_HAS_MMX)$(BR2_ARM_CPU_HAS_NEON),y)
 JPEG_TURBO_CONF_OPT += --with-simd
@@ -20,10 +19,9 @@ JPEG_TURBO_CONF_OPT += --without-simd
 endif
 
 define JPEG_TURBO_REMOVE_USELESS_TOOLS
-	rm -f $(addprefix $(TARGET_DIR)/usr/bin/,cjpeg djpeg jpegtrans rdjpgcom tjbench wrjpgcom)
+	rm -f $(addprefix $(TARGET_DIR)/usr/bin/,cjpeg djpeg jpegtran rdjpgcom tjbench wrjpgcom)
 endef
 
 JPEG_TURBO_POST_INSTALL_TARGET_HOOKS += JPEG_TURBO_REMOVE_USELESS_TOOLS
 
 $(eval $(autotools-package))
-$(eval $(host-autotools-package))

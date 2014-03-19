@@ -27,15 +27,7 @@ HOST_UTIL_LINUX_DEPENDENCIES = host-pkgconf
 # wins the fight over who gets to have their utils actually installed
 ifeq ($(BR2_PACKAGE_BUSYBOX),y)
 UTIL_LINUX_DEPENDENCIES += busybox
-
-# If we want to use busybox cifs/nfs mounts
-# we need to create some helpers to have busybox handle those mounts
-define UTIL_LINUX_TARGET_HELPERS
-        $(INSTALL) -m 0755 package/util-linux/mount.nfs $(TARGET_DIR)/sbin
-	$(INSTALL) -m 0755 package/util-linux/mount.cifs $(TARGET_DIR)/sbin
-endef
 endif
-UTIL_LINUX_POST_INSTALL_TARGET_HOOKS += UTIL_LINUX_TARGET_HELPERS
 
 ifeq ($(BR2_PACKAGE_NCURSES),y)
 UTIL_LINUX_DEPENDENCIES += ncurses
@@ -105,6 +97,31 @@ define UTIL_LINUX_DISABLE_TOOLS
 endef
 UTIL_LINUX_PRE_PATCH_HOOKS += UTIL_LINUX_DISABLE_TOOLS
 endif
+
+# Install PAM configuration files
+ifeq ($(BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS),y)
+define UTIL_LINUX_INSTALL_PAMFILES
+	$(INSTALL) -m 0644 package/util-linux/login.pam \
+		$(TARGET_DIR)/etc/pam.d/login
+	$(INSTALL) -m 0644 package/util-linux/su.pam \
+		$(TARGET_DIR)/etc/pam.d/su
+	$(INSTALL) -m 0644 package/util-linux/su.pam \
+		$(TARGET_DIR)/etc/pam.d/su-l
+endef
+endif
+
+UTIL_LINUX_POST_INSTALL_TARGET_HOOKS += UTIL_LINUX_INSTALL_PAMFILES
+
+# Install agetty->getty symlink to avoid breakage when there's no busybox
+ifeq ($(BR2_PACKAGE_UTIL_LINUX_AGETTY),y)
+ifeq ($(BR2_PACKAGE_BUSYBOX),)
+define UTIL_LINUX_GETTY_SYMLINK
+	ln -sf agetty $(TARGET_DIR)/sbin/getty
+endef
+endif
+endif
+
+UTIL_LINUX_POST_INSTALL_TARGET_HOOKS += UTIL_LINUX_GETTY_SYMLINK
 
 $(eval $(autotools-package))
 $(eval $(host-autotools-package))

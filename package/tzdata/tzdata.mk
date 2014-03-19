@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-TZDATA_VERSION = 2013h
+TZDATA_VERSION = 2013i
 TZDATA_SOURCE = tzdata$(TZDATA_VERSION).tar.gz
 TZDATA_SITE = ftp://ftp.iana.org/tz/releases
 TZDATA_DEPENDENCIES = host-zic
@@ -37,7 +37,6 @@ endef
 define TZDATA_INSTALL_TARGET_CMDS
 	mkdir -p $(TARGET_DIR)/usr/share/zoneinfo
 	cp -a $(@D)/_output/* $(TARGET_DIR)/usr/share/zoneinfo
-	cp -a $(@D)/*.tab $(TARGET_DIR)/usr/share/zoneinfo
 	cd $(TARGET_DIR)/usr/share/zoneinfo;    \
 	for zone in posix/*; do                 \
 	    ln -sfn "$${zone}" "$${zone##*/}";    \
