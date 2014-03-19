@@ -39,7 +39,7 @@ $(if $(wildcard $(LIBAMPLAYER_VERSION)),,$(fatal LibPlayer GIT/Mercurial version
 endif
 
 ifeq ($(BR2_PACKAGE_LIBAMPLAYER),y)
-LIBAMPLAYER_DEPENDENCIES += alsa-lib librtmp pkg-config
+LIBAMPLAYER_DEPENDENCIES += alsa-lib librtmp
 AMFFMPEG_DIR = $(BUILD_DIR)/libamplayer-$(LIBAMPLAYER_VERSION)/amffmpeg
 ifeq ($(BR2_BOARD_TYPE_AMLOGIC_M1),y)
 AMFFMPEG_EXTRA_INCLUDES += -I$(AMFFMPEG_DIR)/../amavutils/include
