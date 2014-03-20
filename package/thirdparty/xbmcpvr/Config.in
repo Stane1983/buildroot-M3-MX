@@ -3,3 +3,4 @@ config BR2_PACKAGE_XBMCPVR
 	help
 	  XBMC PVR Addons
  depends on BR2_PACKAGE_XBMC
+ select BR2_PACKAGE_MYSQL

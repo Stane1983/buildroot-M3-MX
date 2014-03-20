@@ -4,16 +4,15 @@
 #
 #################################################################################
 
-XBMC_VERSION = d35171783e401511dc97dbd23eb40029a3ea9e94
-XBMC_SITE_METHOD = git
-XBMC_SITE = git://github.com/CoreTech-Development/xbmc.git
+XBMC_VERSION = f0640c3609f5203abeba330d31a1a34a581092b9
+XBMC_SITE = $(call github,Stane1983,xbmc,$(XBMC_VERSION))
 XBMC_INSTALL_STAGING = YES
 XBMC_INSTALL_TARGET = YES
 
-XBMC_DEPENDENCIES = host-lzo host-sdl_image
+XBMC_DEPENDENCIES = host-gperf host-lzo host-sdl_image host-swig gawk
 
 XBMC_CONF_OPT += --enable-neon --enable-gles --disable-sdl --disable-x11 --disable-xrandr \
-  --disable-projectm --enable-debug --disable-joystick --with-cpu=cortex-a9
+  --disable-projectm --enable-debug --disable-joystick --with-cpu=cortex-a9 --disable-mysql
 
 ifeq ($(BR2_ARM_AMLOGIC),y)
 XBMC_CONF_OPT += --enable-codec=amcodec
@@ -50,12 +49,12 @@ endif
 
 XBMC_DEPENDENCIES += flac libmad libmpeg2 libogg \
   libsamplerate libtheora libvorbis wavpack bzip2 dbus libcdio \
-  python lzo zlib libgcrypt openssl mysql sqlite fontconfig \
+  python lzo zlib libgcrypt openssl sqlite sqlite fontconfig \
   freetype jasper jpeg libmodplug libpng libungif tiff libcurl \
-  libmicrohttpd libssh2 boost fribidi ncurses pcre libnfs afpfs-ng \
+  libmicrohttpd libssh2 boost libfribidi ncurses pcre libnfs afpfs-ng \
   libplist libshairport libbluray libcec \
   readline expat libxml2 yajl samba libass opengl libusb-compat \
-  avahi udev tinyxml taglib18 libssh
+  avahi udev tinyxml taglib libssh
 
 ifeq ($(BR2_ARM_AMLOGIC),y)
 XBMC_DEPENDENCIES += libamplayer
@@ -128,7 +127,7 @@ CONFLUENCE_POWER_BUTTON_FUNCTION = ActivateWindow(ShutdownMenu)
 endif
 
 XBMC_CONF_ENV += PYTHON_VERSION="$(PYTHON_VERSION_MAJOR)"
-XBMC_CONF_ENV += PYTHON_LDFLAGS="-L$(STAGING_DIR)/usr/lib/ -lpython$(PYTHON_VERSION_MAJOR) -lpthread -ldl -lutil -lm"
+XBMC_CONF_ENV += PYTHON_LDFLAGS="-lpython$(PYTHON_VERSION_MAJOR) -lpthread -ldl -lutil -lm"
 XBMC_CONF_ENV += PYTHON_CPPFLAGS="-I$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR)"
 XBMC_CONF_ENV += PYTHON_SITE_PKG="$(STAGING_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages"
 XBMC_CONF_ENV += PYTHON_NOVERSIONCHECK="no-check"
@@ -138,7 +137,7 @@ XBMC_CONF_ENV += USE_TEXTUREPACKER_NATIVE_ROOT="$(HOST_DIR)/usr"
 XBMC_CONF_ENV += PATH=$(STAGING_DIR)/usr/bin:$(TARGET_PATH)
 
 define XBMC_BOOTSTRAP
-  cd $(XBMC_DIR) && ./bootstrap
+   cd $(@D) && PATH=$(HOST_PATH) ./bootstrap
 endef
 
 define XBMC_INSTALL_ETC
