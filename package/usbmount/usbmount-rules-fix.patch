@@ -1,13 +1,13 @@
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- usbmount.rules |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ usbmount.rules |    4 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
 Index: b/usbmount.rules
 ===================================================================
 --- a/usbmount.rules
 +++ b/usbmount.rules
-@@ -1,7 +1,7 @@
+@@ -1,7 +1,9 @@
  # Rules for USBmount -*- conf -*-
 
  KERNEL=="sd*", DRIVERS=="sbp2",		ACTION=="add",	RUN+="/usr/share/usbmount/usbmount add"
